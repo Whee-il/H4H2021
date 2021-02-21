@@ -5,7 +5,7 @@ import zmq
 #Set up the socket
 context = zmq.Context()
 socket = context.socket(zmq.REP)
-socket.bind("tcp://*:5555")
+socket.bind("tcp://192.168.1.18:5555")  #!!!!!!!!!!!!!!!!!!!!!!!Replace IP with raspberry Pi IP
 
 #status is the current state of the robot. 
 status = "Idle"

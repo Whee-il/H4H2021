@@ -14,10 +14,7 @@ context = zmq.Context()
 
 #  Socket to talk to server
 socket = context.socket(zmq.REQ)
-socket.connect("tcp://localhost:5555")
-
-
-
+socket.connect("tcp://192.168.1.18:5555") #!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Replace with Raspberry Pi IP
 
 @app.route('/')
 def index():
