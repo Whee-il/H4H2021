@@ -29,7 +29,8 @@ if __name__ == '__main__':
 
     floor.print_data()
 
-    floor.printShortestDistance(0,10, len(node_lst))
+    path = floor.getPath(0,10, len(node_lst))
+    print(path)
     
     rend = Renderer()
 
