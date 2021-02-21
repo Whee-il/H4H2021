@@ -52,10 +52,13 @@ if __name__ == '__main__':
 
     #status is the current state of the robot. 
     status = "Idle"
+
+    src_idx = 0
+
     while True:
         #  Wait for next request from client
         message = socket.recv_string()
-        
+        print(message)
         #Respond with current status
         if(message == "update"):
             socket.send_string(status)
@@ -63,7 +66,11 @@ if __name__ == '__main__':
         #Return
         elif((status=="Arrived") and (message == "Return")):
             socket.send_string("Return") #lets the flask server know that the bot has recieved the command and is moving
-            time.sleep(2)   #time.sleep represents running the movement of the bot
+            time.sleep(1)   #time.sleep represents running the movement of the bot
+            path = [in_idx,out_idx]
+            rend.traverse(path, floor)
+            path = floor.getPath(out_idx, src_idx, len(node_lst))
+            rend.traverse(path, floor)
             status = "Idle" #when the bot is done moving, set the status to idle
 
         #Call
@@ -72,6 +79,7 @@ if __name__ == '__main__':
             socket.send_string("Recieved") #lets the flask server know that the bot has recieved the command and is moving
             time.sleep(1)   #time.sleep represents running the movement of the bot
             src_idx = floor.getIdxFromName(message)
+            print(src_idx)
             path = floor.getPath(src_idx, in_idx, len(node_lst))
             rend.traverse(path, floor)
             
