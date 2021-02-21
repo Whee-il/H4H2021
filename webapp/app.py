@@ -14,7 +14,7 @@ context = zmq.Context()
 
 #  Socket to talk to server
 socket = context.socket(zmq.REQ)
-socket.connect("tcp://192.168.1.18:5555") #!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Replace with Raspberry Pi IP
+socket.connect("tcp://192.168.1.200:5555") #!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Replace with Raspberry Pi IP
 
 @app.route('/')
 def index():
@@ -36,7 +36,7 @@ def update(message):
 def Call(message):
     ZMQmessage = "Lmao"
     while(ZMQmessage != "Recieved"):
-        socket.send_string(message['data'])
+        socket.send_string("A1")
         #  Get the reply.
         time.sleep(1)
         ZMQmessage = socket.recv_string()
