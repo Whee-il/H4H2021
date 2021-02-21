@@ -36,7 +36,8 @@ def update(message):
 def Call(message):
     ZMQmessage = "Lmao"
     while(ZMQmessage != "Recieved"):
-        socket.send_string("A1")
+        print(message['data'])
+        socket.send_string(message['data'])
         #  Get the reply.
         time.sleep(1)
         ZMQmessage = socket.recv_string()
