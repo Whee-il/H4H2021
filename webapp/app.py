@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import zmq
+import threading
+import time
 #import socket
 
 #Flask Crap
@@ -11,25 +13,49 @@ socketio = SocketIO(app)
 context = zmq.Context()
 
 #  Socket to talk to server
-print("Connecting to hello world server…")
 socket = context.socket(zmq.REQ)
 socket.connect("tcp://localhost:5555")
 
-@app.route('/', defaults={"instruction": "Go"})
-@app.route('/<instruction>')
-def index(instruction):
-    return render_template('index.html', instruction=instruction)
+
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @socketio.event()
-def my_event(message):
-    print(message['data'])
-    
-    socket.send_string(message['data'])
+def update(message):
+    print("Updating")
+    socket.send_string("update")
+    time.sleep(0.1)
+    ZMQmessage = socket.recv_string()
+    if(ZMQmessage == "Arrived"):
+        emit('status_update', {'data': "Base"})
+    elif(ZMQmessage == "Idle"):
+        emit('status_update', {'data': "Idle"})
 
-    #  Get the reply.
-    ZMQmessage = socket.recv()
 
-    emit('my_response', {'data': message['data']})
+@socketio.event()
+def Call(message):
+    ZMQmessage = "Lmao"
+    while(ZMQmessage != "Recieved"):
+        socket.send_string(message['data'])
+        #  Get the reply.
+        time.sleep(1)
+        ZMQmessage = socket.recv_string()
+        print(ZMQmessage)
+    emit('status_update', {'data': "Moving"})
+
+@socketio.event()
+def Return(message):
+    ZMQmessage = "Lmao"
+    while(ZMQmessage != "Return"):
+        socket.send_string("Return")
+        #  Get the reply.
+        time.sleep(1)
+        ZMQmessage = socket.recv_string()
+    emit('status_update', {'data': "Moving"})
+
 
 @socketio.event
 def connect():

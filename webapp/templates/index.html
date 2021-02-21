@@ -6,41 +6,59 @@
         $(document).ready(function(){
             var server = io();
 
+            var intervalId = setInterval(function() {
+                server.emit('update', {data: ("update")});
+            }, 10000);
+
+            server.on('status_update', function(msg, cb) {
+                $('#status').text("Status: " +msg.data);
+                if(msg.data == "Idle")
+                    $("#call_but").prop('disabled', false);
+                if(msg.data == "Base")
+                    $("#return_but").prop('disabled', false);
+
+                if (cb)
+                    cb();
+            });
+
             server.on('my_response', function(msg, cb) {
                 $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
                 if (cb)
                     cb();
-                instruction = msg.data;
             });
 
             $('form#emit').submit(function(event) {
                 server.emit('my_event', {data: $('#emit_data').val()});
                 return false;
             });
-            $('form#forward').submit(function(event) {
-                server.emit('my_event', {data: ('Forward')});
+            $('form#Call').submit(function(event) {
+                $("#call_but").prop('disabled', true);
+                server.emit('Call', {data: $('#bed').val()});
                 return false;
             });
-            $('form#backward').submit(function(event) {
-                server.emit('my_event', {data: ('Backward')});
+            $('form#Return').submit(function(event) {
+                $("#return_but").prop('disabled', true);
+
+                server.emit('Return', {data: ('Return')});
+
                 return false;
             });
         });
     </script>
 </head>
 <body>
-<h1>Server</h1>
-<h2>Current Instruction {{ instruction }}!</h2>
-<br>
-<form id="forward">
-    <input type="submit" value="Forward">
-</form>
-<form id="backward">
-    <input type="submit" value="Backward">
-</form>
-<br>
+<h1>Robot Status</h1>
+<h2 id="status">Status: Idle</h2>
 
 
-<div id="log"></div>
+<br>
+<form id="Call">
+    <input type="text" name="bed" id="bed" placeholder="A1">
+    <input id="call_but" type="submit" value="Call">
+</form>
+<form id="Return">
+    <input id="return_but" type="submit" value="Return" disabled>
+</form>
+<br>
 </body>
 </html>
