@@ -91,8 +91,10 @@ class BedGraph:
         while (pred[crawl] != -1):
             path.append(pred[crawl])
             crawl = pred[crawl]
+        path.reverse()
 
         return path
+
     
 
     def print_data(self):

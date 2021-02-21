@@ -36,4 +36,6 @@ if __name__ == '__main__':
 
     rend.process(floor)
 
-    time.sleep(1000)
+    time.sleep(3)
+
+    rend.traverse(path, floor)

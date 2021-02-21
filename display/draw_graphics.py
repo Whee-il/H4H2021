@@ -88,6 +88,28 @@ class Renderer:
         graphics.DrawLine(canvas, x1, y2, x2, y2, color)
         graphics.DrawLine(canvas, x2, y2, x2, y1, color)
 
+    def EreaseRect(self, canvas, centroid:tuple, size:tuple):
+        c_x, c_y = centroid
+        width, height = size
+
+        x1 = int(c_x - width/2)
+        y1 = int(c_y - height/2)
+        
+        for x in range(x1, x1+width+1):
+            for y in range(y1, y1+height+1):
+                canvas.SetPixel(x,y,0,0,0)
+
+    def traverse(self, path, graph):
+        name = graph.bed_nodes[path[0]].name
+        for i in range(1, len(path)):
+            graph.bed_nodes[path[i]].occupied=True
+            graph.bed_nodes[path[i]].name = name
+
+            graph.bed_nodes[path[i-1]].occupied = False
+            self.Render(graph)
+            time.sleep(1)
+        
+
     def Render(self, graph:BedGraph):
         canvas = self.matrix
         white = graphics.Color(50,50,50)
@@ -108,5 +130,5 @@ class Renderer:
                 graphics.DrawText(canvas, font, x,y, white, node.name[0])
                 y = y+6
                 graphics.DrawText(canvas, font, x,y, white, node.name[1])
-
-        # self.DrawRect(canvas, white, (3,5), (5,9))
+            else:
+                self.EreaseRect(canvas, node.centroid, bed_size)
