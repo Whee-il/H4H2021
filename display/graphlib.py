@@ -95,7 +95,10 @@ class BedGraph:
 
         return path
 
-    
+    def getIdxFromName(self, name):
+        for node in self.bed_nodes:
+            if node.name == name:
+                return node.idx
 
     def print_data(self):
         print(self.bed_nodes)
