@@ -46,32 +46,19 @@ def construct_graph(node_list):
 
 def BFS(adj, src, dest, v, pred, dist):
 
-	# a queue to maintain queue of vertices whose
-	# adjacency list is to be scanned as per normal
-	# DFS algorithm
 	queue = []
 
-	# boolean array visited[] which stores the
-	# information whether ith vertex is reached
-	# at least once in the Breadth first search
 	visited = [False for i in range(v)]
 
-	# initially all vertices are unvisited
-	# so v[i] for all i is false
-	# and as no path is yet constructed
-	# dist[i] for all i set to infinity
 	for i in range(v):
 
 		dist[i] = 1000000
 		pred[i] = -1
 	
-	# now source is first to be visited and
-	# distance from source to itself should be 0
 	visited[src] = True
 	dist[src] = 0
 	queue.append(src)
 
-	# standard BFS algorithm
 	while (len(queue) != 0):
 		u = queue[0]
 		queue.pop(0)
@@ -83,20 +70,45 @@ def BFS(adj, src, dest, v, pred, dist):
 				pred[adj[u][i]] = u
 				queue.append(adj[u][i])
 
-				# We stop BFS when we find
-				# destination.
 				if (adj[u][i] == dest):
 					return True
 
 	return False
 
+def printShortestDistance(adj, src, dest, v):
+	
+	pred=[0 for i in range(v)]
+	dist=[0 for i in range(v)]
+
+	if (BFS(adj, src, dest, v, pred, dist) == False):
+		print("Given source and destination are not connected")
+
+	# vector path stores the shortest path
+	path = []
+	crawl = dest
+	path.append(crawl)
+	
+	while (pred[crawl] != -1):
+		path.append(pred[crawl])
+		crawl = pred[crawl]
+	
+
+	# distance from source is in distance array
+	print("Shortest path length is : " + str(dist[dest]), end = '')
+
+	# printing path from source to destination
+	print("\nPath is : ")
+	
+	for i in range(len(path)-1, -1, -1):
+		print(path[i], end=' ')
+
 if __name__=='__main__':
-    n1 = Node(0, [1])
+    n1 = Node(0, [1], available=True)
     n2 = Node(1, [0,2,4])
-    n3 = Node(2, [1])
-    n4 = Node(3, [4])
+    n3 = Node(2, [1], available=False)
+    n4 = Node(3, [4], available=False)
     n5 = Node(4, [1,3,5,6,7])
-    n6 = Node(5, [4])
+    n6 = Node(5, [4], available=False)
     n7 = Node(6, [4,7])
     n8 = Node(7, [4,6])
 
@@ -104,3 +116,5 @@ if __name__=='__main__':
     
     adj_arr = construct_graph(node_list)
     print(adj_arr)
+
+    printShortestDistance(adj_arr, 0, 7, len(node_list))
