@@ -46,7 +46,7 @@ class BedGraph:
         self.bed_nodes.append(node)
 
     def BFS(self, src, dest, v, pred, dist):
-        adj = self.adj_matrix
+        adj = self.adj_matrix # adjacency matrix
         queue = []
 
         visited = [False for i in range(v)]

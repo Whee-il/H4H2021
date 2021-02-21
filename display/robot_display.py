@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     rend.process(floor)
 
-    time.sleep(2)
+    time.sleep(1)
 
     in_idx = 10
     out_idx = 11
