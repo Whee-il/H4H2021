@@ -45,6 +45,54 @@ class BedGraph:
         node.set_idx(l)
         self.bed_nodes.append(node)
 
+    def BFS(self, src, dest, v, pred, dist):
+        adj = self.adj_matrix
+        queue = []
+
+        visited = [False for i in range(v)]
+
+        for i in range(v):
+
+            dist[i] = 1000000
+            pred[i] = -1
+        
+        visited[src] = True
+        dist[src] = 0
+        queue.append(src)
+
+        while (len(queue) != 0):
+            u = queue[0]
+            queue.pop(0)
+            for i in range(len(adj[u])):
+            
+                if (visited[adj[u][i]] == False):
+                    visited[adj[u][i]] = True
+                    dist[adj[u][i]] = dist[u] + 1
+                    pred[adj[u][i]] = u
+                    queue.append(adj[u][i])
+
+                    if (adj[u][i] == dest):
+                        return True
+
+        return False
+
+    def getPath(self, src, dest, v):
+        pred=[0 for i in range(v)]
+        dist=[0 for i in range(v)]
+
+        if (self.BFS(src, dest, v, pred, dist) == False):
+            print("Given source and destination are not connected")
+
+        # vector path stores the shortest path
+        path = []
+        crawl = dest
+        path.append(crawl)
+        
+        while (pred[crawl] != -1):
+            path.append(pred[crawl])
+            crawl = pred[crawl]
+
+        return path
     
 
     def print_data(self):
