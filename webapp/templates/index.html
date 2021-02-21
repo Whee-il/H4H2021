@@ -5,7 +5,7 @@
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function(){
             var server = io();
-            var pi = io('http://192.168.1.200:5000');
+
             server.on('my_response', function(msg, cb) {
                 $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
                 if (cb)
@@ -29,7 +29,7 @@
     </script>
 </head>
 <body>
-<h1>My website</h1>
+<h1>Server</h1>
 <h2>Current Instruction {{ instruction }}!</h2>
 <br>
 <form id="forward">
@@ -38,6 +38,8 @@
 <form id="backward">
     <input type="submit" value="Backward">
 </form>
+<br>
+
 
 <div id="log"></div>
 </body>
